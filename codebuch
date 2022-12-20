@@ -1,0 +1,43 @@
+# Datensatz Razzia gegen Reichsbürger #
+Codebuch Stand 2022-12,
+erstellt von Theresa Zippelt (tz025@hdm-stuttgart.de)
+
+## Inhalt
+- Edges.csv (Edgelist)
+- Nodes.csv (Nodelist)
+- Codebuch.md (Codierung der Datensätze)
+
+Das Netzwerk ist ein *gerichtetes two-mode Netzwerk*. 
+
+# EDGE-Attribute
+
+**from**
+initiierender Knoten, in diesem Fall die Reichsbürger. Entspricht ID in der Nodelist. Keine Sonderzeichen, nur ein Wort
+
+**to**
+erhaltender Knoten, definiert den Empfänger in ungerichteten Netzwerken. Entspricht ID in der Nodelist. Keine Sonderzeichen, etc. 
+
+**relation**
+Art der Beziehung zwischen den Personen oder einer Person und einer Organisation,
+1 = *Freunde / enge Zusammenarbeit* Bei einem gerichteten Netzwerk arbeitet der Sender (erste Spalte) besonders intensiv zusammen mit der genannten Zielperson (zweite Spalte), 
+2 = *Kollege* Bei einem gerichteten Netzwerk arbeitet der Sender (erste Spalte) vermehrt mit der genannten Person (zweite Spalte),  
+3 = *Mitglied* Bei einem gerichteten Netzwerk ist der Sender (erste Spalte) Mitglied der genannten Organisation (zweite Spalte),
+4 = *Gründer* Bei einem gerichteten Netzwerk ist der Sender (erste Spalte) Gründer der genannten Organisation (zweite Spalte).
+
+# NODE-Attribute  
+  
+**id**  
+Identische ID wie aus der edgelist zur Identifikation der Knoten. In diesem Fall die Reichsbürger oder Organisationen.
+
+**name**
+numerische ID
+
+**type**
+Relevant bei two-mode Netzwerken, um die Unterscheidung zwischen z.B. Akteur und Event zu berechnen.
+1 = Reichsbürger
+2 = Organisationen
+
+**sector** 
+Gesellschaftliches Teilsystem, dem die Person oder Organisation zuzuordnen ist, als string/characters codiert  
+
+##
