@@ -16,7 +16,7 @@ Das Netzwerk ist ein *gerichtetes two-mode Netzwerk*.
 # EDGE-Attribute
 
 **from**
-initiierender Knoten, in diesem Fall die Reichsbürger. Entspricht ID in der Nodelist. Keine Sonderzeichen, nur ein Wort
+initiierender Knoten, in diesem Fall die Reichsbürger. Entspricht ID in der Nodelist. Keine Sonderzeichen, nur ein Wort.
 
 **to**
 erhaltender Knoten, definiert den Empfänger in ungerichteten Netzwerken. Entspricht ID in der Nodelist. Keine Sonderzeichen, etc. 
@@ -31,17 +31,17 @@ Art der Beziehung zwischen den Personen oder einer Person und einer Organisation
 # NODE-Attribute  
   
 **id**  
-Identische ID wie aus der edgelist zur Identifikation der Knoten. In diesem Fall die Reichsbürger oder Organisationen.
+Abkürzung des Namens, identische ID wie aus der edgelist zur Identifikation der Knoten. In diesem Fall die Reichsbürger oder Organisationen.
 
 **name**
-numerische ID
+Name der Person beziehungsweise der Organisation.
+
+**sector** 
+Gesellschaftliches Teilsystem, dem die Person oder Organisation zuzuordnen ist, als string/characters codiert.  
 
 **type**
 Relevant bei two-mode Netzwerken, um die Unterscheidung zwischen z.B. Akteur und Event zu berechnen.
 1 = Reichsbürger
 2 = Organisationen
-
-**sector** 
-Gesellschaftliches Teilsystem, dem die Person oder Organisation zuzuordnen ist, als string/characters codiert  
 
 ##
