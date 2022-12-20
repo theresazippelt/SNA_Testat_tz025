@@ -1,0 +1,138 @@
+---
+title: "226305 Testat"
+subtitle: "Razzia von Reichsbürgern"
+author: "Theresa Zippelt | tz025@hdm-stuttgart.de"
+date: '2022-12-20'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	message = FALSE,
+	warning = FALSE,
+	include = FALSE)
+library(igraph)
+```
+
+# Vorbereitung Testat
+
+## Daten und Codebuch
+
+Der Datensatz und das Codebuch sind unter
+[Github](https://github.com/theresazippelt/SNA_Testat_tz025)
+verfügbar. Das
+[Codebuch](https://raw.githubusercontent.com/theresazippelt/SNA_Testat_tz025/main/codebuch.rm)
+beschreibt die Variablen und Relationen des Netzwerks und ist ebenfalls auf Github hinterlegt.
+Erhoben wurden die **Reichsbürger** mithilfe des Artikels der [taz](https://taz.de/Razzia-gegen-Reichsbuerger/!5898636/) und dem Artikel von [Belltower.News](https://www.belltower.news/update-reichsbuerger-razzien-das-breite-netzwerk-der-revolutionsbereiten-reichsbuergerinnen-144131/).
+
+
+## Edge-Attribute
+
+from = ID des Knoten Mitglied;
+to = ID des Knoten Mitgliedschaft;
+relationship: 1 = Freundschaft / enge Zusammenarbeit, 2 = Kollegen, 3 = Mitglied, 4 = Gründer
+
+## Node-Attribute
+
+id = ID aus der Edgelist;
+name = Voller Name/Bezeichnung;
+sector = gesellschaftliches Teilsystem;
+type = 1 als Person, 2 als Organisation
+
+## Netzwerk einlesen
+
+Wir lesen unseren Datensatz ein. Manchmal dauert es ein paar Minuten,
+bis die Daten auf github aktualisiert sind.
+
+```{r Netzwerk einlesen}
+# Programmbibliothek laden
+library(igraph)
+
+# Einlesen der Edge- und Nodelist
+edges <- read.csv("https://raw.githubusercontent.com/theresazippelt/SNA_Testat_tz025/main/edges.csv", header=T, as.is=T, sep = ",")
+
+nodes <- read.csv("https://raw.githubusercontent.com/theresazippelt/SNA_Testat_tz025/main/nodes.csv", header=T, as.is=T, sep = ",")
+
+# Matrix erstellen
+edgematrix <-as.matrix(edges)
+
+# Zusammenführen von Edge- und Nodelist als igraph-Objekt s
+rr <- graph_from_data_frame(d=edgematrix, vertices=nodes, directed=T)
+
+rr
+```
+
+## Datensatz vorbereiten
+
+```{r Netzwerk analysieren, fig.height=6, fig.width=9}
+
+# Einfacher plot
+
+plot(rr,
+     asp=0,
+     vertex.size=5,
+     edge.arrow.site=.2,
+     edge.color="black",
+     layout=layout_nicely,
+     main="Razzia gegen Reichsbürger")
+
+# Farben für Vertex-Attribut "sector" festlegen
+
+V(rr)[V(rr)$sector == "Militaer"]$color <- "red"
+V(rr)[V(rr)$sector == "Ernaehrung"]$color <- "green"
+V(rr)[V(rr)$sector == "Polizei"]$color <- "yellow"
+V(rr)[V(rr)$sector == "Handwerk"]$color <- "purple"
+V(rr)[V(rr)$sector == "Politik"]$color <- "brown"
+V(rr)[V(rr)$sector == "Justiz"]$color <- "beige"
+V(rr)[V(rr)$sector == "Kultur"]$color <- "pink"
+V(rr)[V(rr)$sector == "Verschwoerung"]$color <- "orange"
+V(rr)[V(rr)$sector == "Adel"]$color <- "yellow"
+V(rr)[V(rr)$sector == "Gesundheit"]$color <- "lightblue"
+V(rr)[V(rr)$sector == "Landwirtschaft"]$color <- "lightgreen"
+V(rr)[V(rr)$sector == "Astrologie"]$color <- "blue"
+
+```
+
+## Two-Mode Netzwerk sichtbar machen
+
+```{r Two-Mode Netzwerk erstellen}
+
+# Vertex-Attribute anzeigen lassen
+list.vertex.attributes(rr)
+
+# Formen für two-Netzwerk festlegen
+V(rr)[V(rr)$type == 1]$shape <- "circle" # Person
+V(rr)[V(rr)$type == 2]$shape <- "square" # Organisation
+
+```
+
+```{r finales Netzwerk visualisieren, fig.height=6, fig.width=9}
+
+# Netzwerk mit Farben visualisieren
+
+plot(rr,
+     asp=0,
+     layout=layout_with_kk,
+     rescale=TRUE,
+     vertex.size=degree(rr)*2,
+     edge.color="grey20",
+     edge.arrow.size=.2,
+     main="Razzia gegen Reichsbürger",
+     sub="Farbe nach gesellschaftlichem Teilsystem; Quadrat = Personen; Kreis = Organisationen")
+
+```
+## Beantwortung der Fragen
+
+1) Wie interpretieren Sie das erstellte Netzwerk? Wieviel Zeit haben Sie dafür benötigt?
+
+In dem erstellten Netzwerk wird die Vernetzung der Reichsbürger untereinander dargestellt. Trotz verschiedener Organisationen, verschiedener Teilsysteme und ohne die Knoten "Razzia" oder "Reichsbürger", sind die Reichsbürger in einem gemeinsamen Netzwerk vernetzt. Maximilian Eder spielt hier eine besonders große Rolle, da er mit vielen Personen und Organisationen verbunden ist. Zudem wird deutlich, dass die Personen aus dem militärischen Teilsystem besonders stark miteinander vernetzt sind. 
+Für die Bearbeitung dieser Aufgabe habe ich circa 2,5 Stunden gebraucht.
+
+2) Was war Ihr grösster Lernerfolg der Veranstaltung?
+
+Mein größter Lernerfolg in dieser Veranstaltung war definitiv das bessere Verständnis für soziale Netzwerke. Durch das Erstellen von Netzwerken kann man viele hilfreiche Erkenntnisse ziehen. Beispielsweise bei Filmen sagt das Netzwerk viel über den Plot und über die Beziehungen zwischen den Charakteren aus. Ich kenne nun verschiedene Arten von Beziehungen und kann diese mithilfe von Befehlen analysieren. Außerdem konnte ich meine Kenntnisse in R festigen und erweitern. Dadurch kann ich jetzt und in der Zukunft noch genauer und besser an Projekten arbeiten.
+
+3) Welches Netzwerk möchten Sie gerne selbst untersuchen?
+
+Ich selbst würde gerne das Netzwerk einer politischen Partei untersuchen. Besonders interessant wären für mich Parteien wie die Basis oder die AfD. Ich denke, dass man einige interessante Schlüsse daraus ziehen könnte, wer in der Partei eine wichtige Rolle spielt und in welchen anderen Organisationen diese Personen aktiv sind oder mit wem sie außerhalb der Partei in Kontakt treten.
+
